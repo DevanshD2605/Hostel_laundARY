@@ -885,7 +885,8 @@ app.post('/api/complaints/:id/send-back', requireRole('admin'), (req, res) => {
 });
 
 // Notifications: List (Student)
-app.get('/api/notifications', requireRole('student'), (req, res) => {
+app.get('/api/notifications', requireAuth, (req, res) => {
+  if (req.user.role !== 'student') return res.json([]);
   const list = db.notifications[req.user.id] || [];
   res.json(list);
 });

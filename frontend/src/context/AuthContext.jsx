@@ -79,7 +79,12 @@ export function AuthProvider({ children }) {
       const res = await api.auth.verifyOtp(email, '123456');
       const me = res.me || (await refreshUser());
       setUser(me);
-      await fetchNotifications();
+      if (me?.role === 'student') {
+        await fetchNotifications();
+      } else {
+        setNotifications([]);
+        setUnreadCount(0);
+      }
       return me;
     } finally {
       setLoading(false);
